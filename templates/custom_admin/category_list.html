@@ -1,0 +1,30 @@
+{% extends 'custom_admin/index.html' %}
+{% load static %}
+{% block content %}
+
+<h1>Categories</h1>
+<a href="{% url 'custom_admin:add_category' %}" class="btn btn-primary">Add Category</a>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category.name }}</td>
+            <td>{{ category.description }}</td>
+            <td>
+                <a href="{% url 'custom_admin:edit_category' category.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'custom_admin:delete_category' category.id %}" class="btn btn-danger btn-sm">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+
+{% endblock %}
