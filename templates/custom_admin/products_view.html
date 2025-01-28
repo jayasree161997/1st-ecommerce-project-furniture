@@ -1,0 +1,79 @@
+{% extends 'custom_admin/index.html' %}
+{% comment %} {% block title %}Products{% endblock %} {% endcomment %}
+{% load static %}
+{% block content %}
+{% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<!-- Search Form -->
+<form method="GET" action="{% url 'custom_admin:products_view' %}">
+    <input type="text" name="query" placeholder="Search products..." value="{{ request.GET.query }}">
+    <button type="submit">Search</button>
+</form>
+
+<a href="{% url 'custom_admin:add_products' %}" class="btn btn-primary">Add Product</a>
+
+<table class="table table-bordered product-table">
+    <thead>
+        <tr>
+            <th>Image</th>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Brand</th>
+            <th>Price</th>
+            <th>Original Price</th>
+            <th>Discount Percentage</th>
+            <th>Quantity</th>
+            <th>Stock Status</th>
+            <th>Material</th>
+            <th>Dimensions</th>
+            <th>Weight (kg)</th>
+            <th>Warranty</th>
+            <th>Category</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+  
+        {% for product in products %}
+        <tr>
+            {% comment %} <td>
+                <img src="{{ product.main_image.url }}" alt="Product Image" style="width: 50px; height: 50px;">
+            </td> {% endcomment %}
+            <td>
+                {% if product.main_image and product.main_image.url %}
+                    <img src="{{ product.main_image.url }}" alt="Product Image" style="width: 50px; height: 50px;">
+                {% else %}
+                    <img src="{% static 'images/arm chairs/1.jpg' %}" alt="Default Product Image" style="width: 50px; height: 50px;">
+                {% endif %}
+            </td>
+            <td>{{ product.name }}</td>
+            <td>{{ product.description }}</td>
+            <td>{{ product.brand }}</td>
+            <td>${{ product.price }}</td>
+            <td>${{ product.original_price }}</td>
+            <td>{{ product.discount_percentage }}%</td>
+            <td>{{ product.quantity }}</td>
+            <td>{% if product.stock_status %} In Stock {% else %} Out of Stock {% endif %}</td>
+            <td>{{ product.material }}</td>
+            <td>{{ product.dimensions }}</td>
+            <td>{{ product.weight }}</td>
+            <td>{{ product.warranty }}</td>
+            <td>{{ product.category.name }}</td>
+            <td>{{ product.units_sold }}</td>
+            <td class="product-actions">
+                <a href="{% url 'custom_admin:edit_products' product.id %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'custom_admin:delete_products' product.id %}" class="btn btn-danger btn-sm">Delete</a>
+                {% comment %} <a href="{% url 'delete_products' %}" class="btn btn-info btn-sm">View</a> {% endcomment %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
